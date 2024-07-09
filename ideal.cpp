@@ -3,7 +3,7 @@
 int64_t get_bin_index(const int64_t value) {
     int64_t index;
     // Generate the masks without branches
-    index += (value - thresholds[0]) >> 63 & 1;
+    index = (value - thresholds[0]) >> 63 & 1;
     index += (value - thresholds[1]) >> 63 & 1;
     index += (value - thresholds[2]) >> 63 & 1;
     index += (value - thresholds[3]) >> 63 & 1;
