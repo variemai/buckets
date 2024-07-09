@@ -6,10 +6,13 @@ set(CMAKE_CXX_FLAGS "-O3 -Wall -Wextra -Wpedantic")
 
 add_executable(buckets bucketing.cpp
         bench.h
-        bench.cpp)
+        bench.cpp
+        ideal.cpp)
 add_executable(constexpr_bench constexpr_bench.cpp
         bench.h
         bench.cpp)
 add_executable(template_bench template_bench.cpp
         bench.h
         bench.cpp)
+add_executable(reference reference.cpp bench.h bench.cpp)
+add_executable(ideal ideal.cpp bench.h bench.cpp)
