@@ -11,11 +11,10 @@ int get_bin_index(const int64_t value) {
     uint64_t mask5 = ~((value - thresholds[5]) >> 63);
     uint64_t mask6 = ~((value - thresholds[6]) >> 63);
     uint64_t mask7 = ~((value - thresholds[7]) >> 63);
-    uint64_t mask8 = ~((value - thresholds[8]) >> 63);
 
     // Calculate the bucket index without branches
     index = (mask0) + (mask1) + (mask2) + (mask3) + (mask4) + (mask5) + (mask6) +
-            (mask7) + (mask8);
+            (mask7);
 
     return index;
 }
