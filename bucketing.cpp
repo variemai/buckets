@@ -101,35 +101,26 @@ void benchmark() {
     std::cout << "Time to generate " << num_values << " values: " << generation_time.count() << " seconds\n";
 
     // Measure the time taken to get the bucket index for each value
-    start = std::chrono::high_resolution_clock::now();
-    for (const auto& value : values) {
-        bucket = get_bin_index(value);
-        //indices1.push_back(bucket);
-    }
-    end = std::chrono::high_resolution_clock::now();
-    indexing_time = end - start;
-    std::cout << "Time to compute bucket index with get_bin_index for " << num_values << " values: " << indexing_time.count() << " seconds\n";
+    //start = std::chrono::high_resolution_clock::now();
+    //for (const auto& value : values) {
+    //    bucket = get_bin_index(value);
+    //    //indices1.push_back(bucket);
+    //}
+    //end = std::chrono::high_resolution_clock::now();
+    //indexing_time = end - start;
+    //std::cout << "Time to compute bucket index with get_bin_index for " << num_values << " values: " << indexing_time.count() << " seconds\n";
 
 
-    // Measure the time taken to get the bucket index for each value
-    start = std::chrono::high_resolution_clock::now();
-    for (const auto& value : values) {
-        bucket = choose_bucket(value); // Use 'volatile' to prevent compiler optimization
-        //indices0.push_back(bucket);
-    }
-    end = std::chrono::high_resolution_clock::now();
-    indexing_time = end - start;
-    std::cout << "Time to compute bucket index with choose_bucket for " << num_values << " values: " << indexing_time.count() << " seconds\n";
+    //// Measure the time taken to get the bucket index for each value
+    //start = std::chrono::high_resolution_clock::now();
+    //for (const auto& value : values) {
+    //    bucket = choose_bucket(value); // Use 'volatile' to prevent compiler optimization
+    //    //indices0.push_back(bucket);
+    //}
+    //end = std::chrono::high_resolution_clock::now();
+    //indexing_time = end - start;
+    //std::cout << "Time to compute bucket index with choose_bucket for " << num_values << " values: " << indexing_time.count() << " seconds\n";
 
-    // Measure the time taken to get the bucket index for each value
-    start = std::chrono::high_resolution_clock::now();
-    for (const auto& value : values) {
-        bucket = get_bucket_constexpr(value);
-        //indices1.push_back(bucket);
-    }
-    end = std::chrono::high_resolution_clock::now();
-    indexing_time = end - start;
-    std::cout << "Time to compute bucket index with get_bucket_constexpr for " << num_values << " values: " << indexing_time.count() << " seconds\n";
 
     // Measure the time taken to get the bucket index for each value
     start = std::chrono::high_resolution_clock::now();
@@ -141,6 +132,15 @@ void benchmark() {
     indexing_time = end - start;
     std::cout << "Time to compute bucket index with get_bucket_index for " << num_values << " values: " << indexing_time.count() << " seconds\n";
 
+    // Measure the time taken to get the bucket index for each value
+    start = std::chrono::high_resolution_clock::now();
+    for (const auto& value : values) {
+        bucket = get_bucket_constexpr(value);
+        //indices1.push_back(bucket);
+    }
+    end = std::chrono::high_resolution_clock::now();
+    indexing_time = end - start;
+    std::cout << "Time to compute bucket index with get_bucket_constexpr for " << num_values << " values: " << indexing_time.count() << " seconds\n";
 
      //Verify that the two methods produce the same results
      //for (size_t i = 0; i < num_values; ++i) {
