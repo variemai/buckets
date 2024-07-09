@@ -6,7 +6,6 @@ std::vector<int64_t> init_bench()
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_int_distribution<int64_t> dist(1, num_values);
-    std::chrono::duration<double> indexing_time;
 
     // Generate random values and measure the time taken
     auto start = std::chrono::high_resolution_clock::now();
