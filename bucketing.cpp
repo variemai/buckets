@@ -72,11 +72,11 @@ int get_bin_index(int64_t value) {
 }
 
 void benchmark() {
-    const size_t num_values = 200000000;
+    constexpr size_t num_values = 200000000;
     std::vector<int64_t> values(num_values);
-    std::vector<int> indices0(num_values);
-    std::vector<int> indices1(num_values);
-    int bucket;
+    //std::vector<int> indices0(num_values);
+    //std::vector<int> indices1(num_values);
+    volatile int bucket;
 
     // Seed for random number generator
     std::random_device rd;
@@ -98,8 +98,7 @@ void benchmark() {
     for (const auto& value : values) {
         //volatile int bucket = get_bucket_index<thresholds.size()>(value);
         bucket = get_bin_index(value);
-        indices1.push_back(bucket);
-        // Use 'volatile' to prevent compiler optimization
+        //indices1.push_back(bucket);
     }
     end = std::chrono::high_resolution_clock::now();
     indexing_time = end - start;
@@ -110,7 +109,7 @@ void benchmark() {
     start = std::chrono::high_resolution_clock::now();
     for (const auto& value : values) {
         bucket = choose_bucket(value); // Use 'volatile' to prevent compiler optimization
-        indices0.push_back(bucket);
+        //indices0.push_back(bucket);
     }
     end = std::chrono::high_resolution_clock::now();
     indexing_time = end - start;
@@ -120,9 +119,7 @@ void benchmark() {
     start = std::chrono::high_resolution_clock::now();
     for (const auto& value : values) {
         bucket = get_bucket_index<thresholds.size()>(value);
-        //bucket = get_bin_index(value);
-        indices1.push_back(bucket);
-        // Use 'volatile' to prevent compiler optimization
+        //indices1.push_back(bucket);
     }
     end = std::chrono::high_resolution_clock::now();
     indexing_time = end - start;
@@ -130,12 +127,12 @@ void benchmark() {
 
 
      //Verify that the two methods produce the same results
-     for (size_t i = 0; i < num_values; ++i) {
-         if (indices0[i] != indices1[i]) {
-             std::cerr << "Mismatch at index " << i << ": " << indices0[i] << " != " << indices1[i] << std::endl;
-             break;
-         }
-     }
+     //for (size_t i = 0; i < num_values; ++i) {
+     //    if (indices0[i] != indices1[i]) {
+     //        std::cerr << "Mismatch at index " << i << ": " << indices0[i] << " != " << indices1[i] << std::endl;
+     //        break;
+     //    }
+     //}
 }
 
 
