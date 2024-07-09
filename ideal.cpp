@@ -1,4 +1,5 @@
 #include "bench.h"
+
 int get_bin_index(int64_t value) {
     int index;
     // Generate the masks without branches

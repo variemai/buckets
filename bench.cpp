@@ -1,6 +1,8 @@
 #include "bench.h"
+
 std::vector<int64_t> init_bench()
 {
+    std::cout << "Size of thresholds: " << sizeof(thresholds) << "\n";
     std::vector<int64_t> values(num_values);
     // Seed for random number generator
     std::random_device rd;

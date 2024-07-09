@@ -1,4 +1,5 @@
 #include "bench.h"
+
 constexpr int64_t get_bucket_constexpr(const int64_t value, size_t index = NUM_BUCKETS - 1) {
     if (index == 0) {
         return ~((value - thresholds[0]) >> 63);  // Handle the first bucket explicitly
