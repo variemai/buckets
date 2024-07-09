@@ -3,18 +3,14 @@
 int64_t get_bin_index(const int64_t value) {
     int64_t index;
     // Generate the masks without branches
-    uint64_t mask0 = ~((value - thresholds[0]) >> 63);
-    uint64_t mask1 = ~((value - thresholds[1]) >> 63);
-    uint64_t mask2 = ~((value - thresholds[2]) >> 63);
-    uint64_t mask3 = ~((value - thresholds[3]) >> 63);
-    uint64_t mask4 = ~((value - thresholds[4]) >> 63);
-    uint64_t mask5 = ~((value - thresholds[5]) >> 63);
-    uint64_t mask6 = ~((value - thresholds[6]) >> 63);
-    uint64_t mask7 = ~((value - thresholds[7]) >> 63);
-
-    // Calculate the bucket index without branches
-    index = (mask0) + (mask1) + (mask2) + (mask3) + (mask4) + (mask5) + (mask6) +
-            (mask7);
+    index += (value - thresholds[0]) >> 63 & 1;
+    index += (value - thresholds[1]) >> 63 & 1;
+    index += (value - thresholds[2]) >> 63 & 1;
+    index += (value - thresholds[3]) >> 63 & 1;
+    index += (value - thresholds[4]) >> 63 & 1;
+    index += (value - thresholds[5]) >> 63 & 1;
+    index += (value - thresholds[6]) >> 63 & 1;
+    index += (value - thresholds[7]) >> 63 & 1;
 
     return index;
 }

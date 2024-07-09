@@ -5,7 +5,7 @@ template <size_t N>
 struct BucketIndexHelper {
     static int64_t get_bucket_index(const int64_t value) {
         int64_t mask = ~((value - thresholds[N-1]) >> 63);
-        return mask + BucketIndexHelper<N-1>::get_bucket_index(value);
+        return (mask & 1) + BucketIndexHelper<N-1>::get_bucket_index(value);
     }
 };
 
@@ -13,7 +13,7 @@ template <>
 struct BucketIndexHelper<1> {
     static int get_bucket_index(const int64_t value) {
         int64_t mask = ~((value - thresholds[0]) >> 63);
-        return mask;
+        return (mask & 1);
     }
 };
 
