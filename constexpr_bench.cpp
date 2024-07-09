@@ -1,7 +1,10 @@
 #include "bench.h"
 
 constexpr int64_t get_bucket_constexpr(const int64_t value, size_t index = NUM_BUCKETS - 1) {
-    return index == 0 ? ~((value - thresholds[0]) >> 63) : ~((value - thresholds[index - 1]) >> 63) + get_bucket_constexpr(value, index - 1);
+
+    //return ~((value - thresholds[index]) >> 63) + get_bucket_constexpr(value, index - 1);
+    return index == 0
+    ? ~((value - thresholds[0]) >> 63) : ~((value - thresholds[index - 1]) >> 63) + get_bucket_constexpr(value, index - 1);
 }
 
 void benchmark() {

@@ -1,7 +1,7 @@
 #include "bench.h"
 
-int get_bin_index(const int64_t value) {
-    int index;
+int64_t get_bin_index(const int64_t value) {
+    int64_t index;
     // Generate the masks without branches
     uint64_t mask0 = ~((value - thresholds[0]) >> 63);
     uint64_t mask1 = ~((value - thresholds[1]) >> 63);
