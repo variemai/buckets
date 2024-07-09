@@ -3,7 +3,7 @@
 // Utility to generate masks and index calculation at compile time
 template <size_t N>
 struct BucketIndexHelper {
-    static int64_t get_bucket_index(int64_t value) {
+    static int64_t get_bucket_index(const int64_t value) {
         int64_t mask = ~((value - thresholds[N-1]) >> 63);
         return mask + BucketIndexHelper<N-1>::get_bucket_index(value);
     }
@@ -11,7 +11,7 @@ struct BucketIndexHelper {
 
 template <>
 struct BucketIndexHelper<1> {
-    static int get_bucket_index(int64_t value) {
+    static int get_bucket_index(const int64_t value) {
         int64_t mask = ~((value - thresholds[0]) >> 63);
         return mask;
     }
@@ -25,7 +25,7 @@ struct BucketIndexHelper<0> {
 };
 
 template <size_t N>
-int64_t get_bucket_index(int64_t value) {
+int64_t get_bucket_index(const int64_t value) {
     //static_assert(N <= thresholds.size(), "N must not exceed the size of thresholds");
     return BucketIndexHelper<N>::get_bucket_index(value);
 }

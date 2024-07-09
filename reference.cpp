@@ -1,7 +1,7 @@
 #include "bench.h"
 
 int
-choose_bucket(int64_t bytes) {
+choose_bucket(const int64_t bytes) {
     int index;
     for (index = 0; index < NUM_BUCKETS-1; index++) {
         if ( thresholds[index] > bytes) {
