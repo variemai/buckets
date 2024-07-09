@@ -14,7 +14,7 @@ template <size_t N>
 struct BucketIndexHelper {
     static int get_bucket_index(int64_t value) {
         int64_t mask = ~((value - thresholds[N-1]) >> 63);
-        return (mask & 1) + BucketIndexHelper<N-1>::get_bucket_index(value);
+        return mask + BucketIndexHelper<N-1>::get_bucket_index(value);
     }
 };
 
@@ -22,7 +22,7 @@ template <>
 struct BucketIndexHelper<1> {
     static int get_bucket_index(int64_t value) {
         int64_t mask = ~((value - thresholds[0]) >> 63);
-        return (mask & 1);
+        return mask;
     }
 };
 
@@ -52,6 +52,7 @@ choose_bucket(int64_t bytes) {
 
 
 int get_bin_index(int64_t value) {
+    int index;
     // Generate the masks without branches
     uint64_t mask0 = ~((value - thresholds[0]) >> 63);
     uint64_t mask1 = ~((value - thresholds[1]) >> 63);
@@ -64,17 +65,18 @@ int get_bin_index(int64_t value) {
     uint64_t mask8 = ~((value - thresholds[8]) >> 63);
 
     // Calculate the bucket index without branches
-    int index = (mask0 & 1) + (mask1 & 1) + (mask2 & 1) + (mask3 & 1) + (mask4 & 1) + (mask5 & 1) + (mask6 & 1) + (mask7 & 1) + (mask8 & 1);
+    index = (mask0) + (mask1) + (mask2) + (mask3) + (mask4) + (mask5) + (mask6) +
+            (mask7) + (mask8);
 
     return index;
 }
 
 void benchmark() {
-    const size_t num_values = 1000000000;
+    const size_t num_values = 200000000;
     std::vector<int64_t> values(num_values);
-    //std::vector<int> indices0(num_values);
-    //std::vector<int> indices1(num_values);
-    volatile int bucket;
+    std::vector<int> indices0(num_values);
+    std::vector<int> indices1(num_values);
+    int bucket;
 
     // Seed for random number generator
     std::random_device rd;
@@ -96,7 +98,7 @@ void benchmark() {
     for (const auto& value : values) {
         //volatile int bucket = get_bucket_index<thresholds.size()>(value);
         bucket = get_bin_index(value);
-        //indices1.push_back(get_bucket_index<thresholds.size()>(value));
+        indices1.push_back(bucket);
         // Use 'volatile' to prevent compiler optimization
     }
     end = std::chrono::high_resolution_clock::now();
@@ -107,8 +109,8 @@ void benchmark() {
     // Measure the time taken to get the bucket index for each value
     start = std::chrono::high_resolution_clock::now();
     for (const auto& value : values) {
-        //indices0.push_back(choose_bucket(value));
         bucket = choose_bucket(value); // Use 'volatile' to prevent compiler optimization
+        indices0.push_back(bucket);
     }
     end = std::chrono::high_resolution_clock::now();
     indexing_time = end - start;
@@ -119,7 +121,7 @@ void benchmark() {
     for (const auto& value : values) {
         bucket = get_bucket_index<thresholds.size()>(value);
         //bucket = get_bin_index(value);
-        //indices1.push_back(get_bucket_index<thresholds.size()>(value));
+        indices1.push_back(bucket);
         // Use 'volatile' to prevent compiler optimization
     }
     end = std::chrono::high_resolution_clock::now();
@@ -127,13 +129,13 @@ void benchmark() {
     std::cout << "Time to compute bucket index with get_bucket_index for " << num_values << " values: " << indexing_time.count() << " seconds\n";
 
 
-    // Verify that the two methods produce the same results
-    // for (size_t i = 0; i < num_values; ++i) {
-    //     if (indices0[i] != indices1[i]) {
-    //         std::cerr << "Mismatch at index " << i << ": " << indices0[i] << " != " << indices1[i] << std::endl;
-    //         break;
-    //     }
-    // }
+     //Verify that the two methods produce the same results
+     for (size_t i = 0; i < num_values; ++i) {
+         if (indices0[i] != indices1[i]) {
+             std::cerr << "Mismatch at index " << i << ": " << indices0[i] << " != " << indices1[i] << std::endl;
+             break;
+         }
+     }
 }
 
 
